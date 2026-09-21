@@ -6,7 +6,6 @@ public class changeAnim : MonoBehaviour
 
     private void Start()
     {
-
         anim = GetComponent<Animator>();
         anim.SetBool("walking", true);
     }
@@ -21,5 +20,15 @@ public class changeAnim : MonoBehaviour
         {
             anim.SetBool("walking", false);
         }
+    }
+
+    public void ChangeFast()
+    {
+        anim.SetTrigger("fast");
+    }
+
+    public void ChangeSlow()
+    {
+        anim.SetTrigger("slow");
     }
 }
