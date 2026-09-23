@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class changeAnim : MonoBehaviour
 {
     private Animator anim;
+    public DialogueSystem ds;
 
     private void Start()
     {
@@ -19,6 +21,35 @@ public class changeAnim : MonoBehaviour
         else
         {
             anim.SetBool("walking", false);
+        }
+    }
+
+    public void ChangeScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void ChangeTrigger(string s)
+    {
+        anim.SetTrigger(s);
+    }
+
+    public void Inicio()
+    {
+        ds.StartDialogue();
+    }
+
+
+
+    public void ChangeBool(string s)
+    {
+        if (anim.GetBool(s) == false)
+        {
+            anim.SetBool(s, true);
+        }
+        else
+        {
+            anim.SetBool(s, false);
         }
     }
 

@@ -1,66 +1,95 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Collections;
 
 public class DialogueSystem : MonoBehaviour
 {
-    public TextMeshProUGUI dialogueText;
+    public TextMeshProUGUI text;
     public string[] lines;
-    public float textSpeed = .1f;
-    int index;
+    public float textSpeed;
+    public GameObject panel;
+    public GameObject endPanel;
+    Animator animator;
+    bool isStarted;
 
+    public bool activate;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private int index;
+
+    // Start is called before the first frame update
     void Start()
     {
-        dialogueText.text = string.Empty;
-        StartDialogue();
+        activate = false;
+        animator = GetComponent<Animator>();
+        text.text = string.Empty;
+        isStarted = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            if(dialogueText.text == lines[index])
+            if (text.text == lines[index])
             {
                 NextLine();
             }
             else
             {
                 StopAllCoroutines();
-                dialogueText.text = lines[index];
+                text.text = lines[index];
             }
+        }
+    }
+
+    public void Skip()
+    {
+        if (text.text == lines[index])
+        {
+            NextLine();
+        }
+        else
+        {
+            StopAllCoroutines();
+            text.text = lines[index];
         }
     }
 
     public void StartDialogue()
     {
         index = 0;
-        StartCoroutine(WriteLine());
+        isStarted = true;
+        StartCoroutine(TypeLine());
     }
 
-    IEnumerator WriteLine()
+    IEnumerator TypeLine()
     {
-        foreach(char letter in lines[index].ToCharArray())
+        foreach (char c in lines[index].ToCharArray())
         {
-            dialogueText.text += letter;
-
+            text.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
     }
 
-    public void NextLine()
+    void NextLine()
     {
-        if(index < lines.Length -1)
+        if (index < lines.Length - 1)
         {
             index++;
-            dialogueText.text = string.Empty;
-            StartCoroutine(WriteLine());
+            text.text = string.Empty;
+            StartCoroutine(TypeLine());
         }
         else
         {
-            gameObject.SetActive(false);
+            panel.gameObject.SetActive(false);
+            endPanel.gameObject.SetActive(true);
         }
+    }
+
+    public void Destroyer()
+    {
+        activate = true;
+        gameObject.SetActive(false);
     }
 }
